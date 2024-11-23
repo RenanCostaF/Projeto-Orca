@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-login',
@@ -7,20 +7,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
-  constructor(private router: Router) {}
+  constructor(private afAuth: AngularFireAuth) {}
 
-  goBack() {
-    // Substitua '/' pela rota para a qual você deseja que o botão volte.
-    this.router.navigate(['/home']);
-  }
-
-  login() {
-    const isAuthenticated = true; // Substitua por sua lógica de autenticação.
-
-    if (isAuthenticated) {
-      this.router.navigate(['/principal']); // Redireciona para a página principal após login.
-    } else {
-      console.error('Falha no login!');
-    }
+  login(email: string, password: string) {
+    this.afAuth.signInWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        console.log('Login realizado com sucesso:', userCredential.user);
+        // Redirecione para a página principal
+      })
+      .catch(err => {
+        console.error('Erro no login:', err);
+        alert('E-mail ou senha inválidos.');
+      });
   }
 }

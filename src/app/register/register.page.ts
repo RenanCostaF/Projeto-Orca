@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-register',
@@ -7,11 +7,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage {
-  constructor(private router: Router) {}
+  constructor(private afAuth: AngularFireAuth) {}
 
-  register() {
-    // Substitua pela lógica de registro
-    console.log('Usuário registrado!');
-    this.router.navigate(['/login']); // Redireciona para a página de login
+  register(email: string, password: string) {
+    this.afAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then(user => console.log('Usuário registrado com sucesso:', user))
+      .catch(err => console.error('Erro ao registrar usuário:', err));
   }
 }
